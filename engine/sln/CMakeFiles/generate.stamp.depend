@@ -1,0 +1,23 @@
+# CMake generation dependency list for this directory.
+F:/workspace/engine/CMakeLists.txt
+F:/workspace/engine/sln/CMakeFiles/3.6.0-rc1/CMakeSystem.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeSystemSpecificInitialize.cmake
+F:/workspace/engine/sln/CMakeFiles/3.6.0-rc1/CMakeCCompiler.cmake
+F:/workspace/engine/sln/CMakeFiles/3.6.0-rc1/CMakeCXXCompiler.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeSystemSpecificInformation.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeGenericSystem.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/Platform/Windows.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/Platform/WindowsPaths.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeCInformation.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeLanguageInformation.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/Platform/Windows-MSVC-C.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/Platform/Windows-MSVC.cmake
+F:/workspace/engine/sln/CMakeFiles/3.6.0-rc1/CMakeRCCompiler.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeRCInformation.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeCommonLanguageInclude.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeCXXInformation.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeLanguageInformation.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/Compiler/MSVC-CXX.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/Platform/Windows-MSVC-CXX.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/Platform/Windows-MSVC.cmake
+E:/Tools/cmake-3.6.0-rc1-win64-x64/share/cmake-3.6/Modules/CMakeCommonLanguageInclude.cmake

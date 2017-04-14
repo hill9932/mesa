@@ -1,0 +1,22 @@
+the way to build libthrift.lib and libthriftnb.lib
+
+1.	Open the Developer Visual Studio 2013 Command Prompt that you find via
+Start > All Programs > Visual Studio 2013 > Developer Command Prompt for VS2013
+2.	Therein, navigate to the unzipped libevent directory (where sit sub-directories such as “compat”, “include”, and “test”).
+3.	Run the command  nmake -f Makefile.nmake, which will build libevent.
+4.	Extract Apache Thrift tar file and navigate to {thrift_install_dir}\lib\cpp, then open thrift.sln project with Visual Studio 2013 (you’ll probably be prompted to upgrade the project, just accept it kindly!). The solution contains two projects: libthrift and libthriftnb.
+5.	Right-click on libthrift project and select Properties, then go to C/C++ > General and under Additional Include Directories enter the following line:  {boost_install_dir};{boost_install_dir}\boost_1_58_0\boost;{openssl_install_dir}\include , then to Librarian > General and under Additional Library Directories enter the following line:{openss_install_dir}\lib.
+6.	Right-click now on libthriftnb project and select Properties, then go to C/C++->General and under Additional Include Directories enter the following line:  {boost_install_dir};{libevent_install_dir};{libevent_install_dir}\include;{libevent_install_dir}\WIN32-Code;.
+7.	Inside libthrift project content, expand concurrency folder and Remove BoostThreadFactory.cpp file. This file causes compilation issues and must be removed in order to continue.
+8.	Select type of build: Debug or Release, and Build the two projects. Upon a success, you will see libthrift.lib and libthriftnb.lib files inside Debug or Release directory respectively.
+
+Note: before compile thrift, has to add the macro USE_BOOST_THREAD=1 to enable boost thread,
+and has to add TMultiplexedProtocol.cpp for thrift protocols.
+openssl's version: openssl-0.9.8w
+
+
+
+
+
+
+
