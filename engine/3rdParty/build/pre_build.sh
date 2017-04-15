@@ -153,7 +153,7 @@ build_wireshark()
 
 main() 
 {
-	create_symbol
+	./create_symbol.sh
 	
 	case $COMMAND in		
 	build_log4cplus)
@@ -178,7 +178,6 @@ main()
 		
 	all)
 		install_packages
-		./create_symbol.sh
 		build_log4cplus	
 		build_lua
 		build_wireshark
