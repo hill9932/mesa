@@ -153,11 +153,9 @@ build_wireshark()
 
 main() 
 {
-	case $COMMAND in
-	create_symbol)
-		./create_symbol
-		;;
-		
+	create_symbol
+	
+	case $COMMAND in		
 	build_log4cplus)
 		build_log4cplus
 		;;
