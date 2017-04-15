@@ -1,4 +1,0 @@
-F:/workspace/engine/sln/CMakeFiles/ALL_BUILD.dir
-F:/workspace/engine/sln/CMakeFiles/ZERO_CHECK.dir
-F:/workspace/engine/sln/project/collector/CMakeFiles/collector.dir
-F:/workspace/engine/sln/project/collector/CMakeFiles/ALL_BUILD.dir
