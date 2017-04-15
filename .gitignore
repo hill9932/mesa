@@ -1,5 +1,5 @@
 # Certain path
-engine/sln
+/engine/sln
 
 # Prerequisities
 *.d
