@@ -31,4 +31,4 @@ ln -sf src/lua-5.3.4					$ROOT_DIR/lua
 ln -sf src/popt							$ROOT_DIR/popt
 ln -sf src/thrift-0.9.1					$ROOT_DIR/thrift
 ln -sf src/tinyxml						$ROOT_DIR/tinyxml
-ln -sf src/ndpi/nDPI-dev				$ROOT_DIR/ndpi
+ln -sf src/ndpi/nDPI-1.8				$ROOT_DIR/ndpi

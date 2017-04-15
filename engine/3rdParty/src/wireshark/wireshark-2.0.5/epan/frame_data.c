@@ -287,7 +287,7 @@ frame_data_compare(const struct epan_session *epan, const frame_data *fdata1, co
 
 void
 frame_data_init(frame_data *fdata, guint32 num,
-                const struct wtap_pepan_dissect_newkthdr *phdr, gint64 offset,
+                const struct wtap_pkthdr *phdr, gint64 offset,
                 guint32 cum_bytes)
 {
   fdata->pfd = NULL;

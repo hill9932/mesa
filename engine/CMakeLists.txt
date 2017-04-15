@@ -64,7 +64,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 	
 	set(SYSTEM_LIBS rt m dl pthread)
 	
-else()	// MSVC
+else()	# MSVC
     add_definitions(-DWIN32)
 	add_definitions(-DWIN32_LEAN_AND_MEAN)	
 
@@ -86,6 +86,7 @@ include_directories("${PROJECT_ROOT_PATH}/3rdParty/tbb/include")
 include_directories("${PROJECT_ROOT_PATH}/3rdParty/dpdk")
 include_directories("${PROJECT_ROOT_PATH}/3rdParty/glib")
 include_directories("${PROJECT_ROOT_PATH}/3rdParty/wireshark")
+include_directories("${PROJECT_ROOT_PATH}/3rdParty/ndpi/src/include")
 include_directories("${SYSTEM_LOCAL_LIB_PATH}/glib-2.0/include")
 include_directories("${PROJECT_ROOT_PATH}/share/common/src")
 include_directories("${PROJECT_ROOT_PATH}/test/include")

@@ -38,7 +38,7 @@ build_log4cplus()
     cd $LIB_ROOT_DIR;
     chmod +x configure;
     ./configure CXXFLAGS="-fPIC -std=c++11" --with-gnu-ld=yes --prefix=$ROOT_OF_LIB_OUTPUT --libdir=$ROOT_OF_LIB_OUTPUT --enable-shared=no --enable-static=yes && 
-	make && make install && ldconfig
+	make && make install
 	
     if [ $? != 0 ]
     then
@@ -49,6 +49,17 @@ build_log4cplus()
 	echo "Build log4cplus finished."
 }
 
+
+build_lua()
+{
+	echo "Building lua ..."
+	
+	LIB_ROOT_DIR=$ROOT_OF_SOURCE/lua
+	cd $LIB_ROOT_DIR;
+	make linux && cp $LIB_ROOT_DIR/src/liblua.a $ROOT_OF_LIB_OUTPUT
+	
+	echo "Build lua finished"
+}
 
 build_ndpi()
 {
@@ -72,7 +83,7 @@ build_gtest()
     cd $LIB_ROOT_DIR;
     chmod +x configure;
     ./configure CXXFLAGS="-fPIC -std=c++11" --with-gnu-ld=yes --prefix=$ROOT_OF_LIB_OUTPUT --libdir=$ROOT_OF_LIB_OUTPUT --enable-shared=no --enable-static=yes && 
-	make && make install && ldconfig
+	make && make install
 	
     if [ $? != 0 ]
     then
@@ -134,8 +145,7 @@ build_wireshark()
 	chmod a+x autogen.sh &&
 	./autogen.sh &&
 	./configure --without-qt --without-gtk3 --without-lua --disable-wireshark --bindir=$ROOT_OF_BIN_OUTPUT --libdir=$ROOT_OF_LIB_OUTPUT && 
-	make && 
-	make install 
+	make && make install 
 	
 	echo "Build wireshark finished."
 }	
@@ -143,11 +153,9 @@ build_wireshark()
 
 main() 
 {
-	case $COMMAND in
-	create_symbol)
-		./create_symbol
-		;;
-		
+	create_symbol
+	
+	case $COMMAND in		
 	build_log4cplus)
 		build_log4cplus
 		;;
@@ -172,8 +180,10 @@ main()
 		install_packages
 		./create_symbol.sh
 		build_log4cplus	
+		build_lua
 		build_wireshark
 		build_dpdk
+		build_ndpi
 		;;
 	*)
 		echo "[Usage:] $0 all/build_dpdk"
