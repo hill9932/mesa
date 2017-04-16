@@ -12,8 +12,9 @@ set(COMMON_SRC 		src/common.cpp
 					src/time_.cpp
 					src/log_.cpp
 					src/file_util.cpp
-					src/file_.cpp
+					src/aio_file.cpp
 					src/aio_.cpp
+					src/pcap_file.cpp
 					src/thread_.cpp
 					src/system_.cpp
 					src/platform_win32.cpp
@@ -31,7 +32,7 @@ set(COMMON_HEADER 	src/platform.h
 					src/time_.h
 					src/buffer_.h
 					src/file_util.h
-					src/file_.h
+					src/aio_file.h
 					src/aio_.h
 					src/thread_.h
 					src/system_.h
@@ -54,12 +55,12 @@ set_target_properties (common PROPERTIES FOLDER lib)
 #
 project(common_test)
 
-set(COMMON_TEST_SRC	test/string_test.cpp
-					test/file_test.cpp
-					test/main.cpp)
+set(COMMON_TEST_SRC	unitest/string_test.cpp
+					unitest/file_test.cpp
+					unitest/main.cpp)
 
 add_executable(common_test ${COMMON_TEST_SRC})
 add_dependencies(common_test common)
 target_link_libraries(common_test common gtest popt log4cplus aio)
 
-set_target_properties (common_test PROPERTIES FOLDER test)
+set_target_properties (common_test PROPERTIES FOLDER unitest)

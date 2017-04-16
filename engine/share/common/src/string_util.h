@@ -53,6 +53,13 @@ namespace LabSpace
             static size_t convert2Hex(char buf[], const void* _value);
             static u_int64 HexStr2Dec(const tchar* _value);
 
+            static std::string  AddValue(const string& _value, u_int64 _count);
+            static std::string	MinusValue(const string& _value, u_int64 _count);
+            static void			AddValueR(string& _value, u_int64 _count);
+            static void			MinusValueR(string& _value, u_int64 _count);
+            static void			AddValueR(byte* _value, int _valueSize, u_int64 _count);
+            static void			MinusValueR(byte* _value, int _valueSize, u_int64 _count);
+
             /**
             * @Function: Get the file path exclude the parameters
             **/

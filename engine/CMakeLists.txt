@@ -98,7 +98,7 @@ link_directories("${PROJECT_ROOT_PATH}/lib")
 #
 # include the subdirectories
 #
-add_subdirectory(${PROJECT_ROOT_PATH}/3rdParty/gtest)
+#add_subdirectory(${PROJECT_ROOT_PATH}/3rdParty/gtest)
 
 add_subdirectory(share/common)
 add_subdirectory(project/collector)
