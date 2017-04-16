@@ -1,10 +1,10 @@
 #!/bin/bash
 set -x
 
-CWD=$(cd `dirname $0`; pwd)
-ROOT_OF_SOURCE=$CWD/..
-ROOT_OF_LIB_OUTPUT=$CWD/../lib
-ROOT_OF_BIN_OUTPUT=$CWD/../bin
+BUILD_OF_DIR=$(cd `dirname $0`; pwd)
+ROOT_OF_SOURCE=$BUILD_OF_DIR/../3rdParty
+ROOT_OF_LIB_OUTPUT=$ROOT_OF_SOURCE/lib
+ROOT_OF_BIN_OUTPUT=$ROOT_OF_SOURCE/bin
 
 COMMAND="all"
 if [ $# -ge 1 ]; then
@@ -153,7 +153,7 @@ build_wireshark()
 
 main() 
 {
-	./create_symbol.sh
+	$BUILD_OF_DIR/create_symbol.sh
 	
 	case $COMMAND in		
 	build_log4cplus)
