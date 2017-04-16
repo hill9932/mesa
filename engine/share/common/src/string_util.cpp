@@ -250,18 +250,6 @@ namespace LabSpace
             return value;
         }
 
-		std::string AddValue(const string& _value, u_int64 _count)
-		{
-			string result = _value;
-			AddValueR(result, _count);
-			return result;
-		}
-
-		void AddValueR(string& _value, u_int64 _count)
-		{
-			AddValueR((byte*)_value.data(), _value.size(), _count);
-		}
-
 		void AddValueR(byte* _value, int _valueSize, u_int64 _count)
 		{
 			int     carry = 0;
@@ -283,18 +271,17 @@ namespace LabSpace
 			}
 		}
 
-		std::string MinusValue(const string& _value, u_int64 _count)
-		{
-			string result = _value;
-			MinusValueR(result, _count);
-			return result;
-		}
+        void AddValueR(string& _value, u_int64 _count)
+        {
+            AddValueR((byte*)_value.data(), _value.size(), _count);
+        }
 
-		void MinusValueR(string& _value, u_int64 _count)
-		{
-			assert(_value.size() <= sizeof(u_int64));
-			AddValueR((byte*)_value.data(), _value.size(), _count);
-		}
+        std::string AddValue(const string& _value, u_int64 _count)
+        {
+            string result = _value;
+            AddValueR(result, _count);
+            return result;
+        }
 
 		void MinusValueR(byte* _value, int _valueSize, u_int64 _count)
 		{
@@ -316,6 +303,19 @@ namespace LabSpace
 				++addByte;
 			}
 		}
+
+        void MinusValueR(string& _value, u_int64 _count)
+        {
+            assert(_value.size() <= sizeof(u_int64));
+            AddValueR((byte*)_value.data(), _value.size(), _count);
+        }
+
+        std::string MinusValue(const string& _value, u_int64 _count)
+        {
+            string result = _value;
+            MinusValueR(result, _count);
+            return result;
+        }
 
         /**
         * @Function: Get the file name exclude the command line
