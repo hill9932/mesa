@@ -6,90 +6,65 @@
 
 namespace LabSpace
 {
-    namespace Common
-    {
-        class CHFile
-        {
-        public:
-            struct FileAccessMode
-            {
-                enum FILE_ACCESS
-                {
-                    ACCESS_NONE = 0,
-                    ACCESS_READ = 1,
-                    ACCESS_WRITE = 2
-                };
-            };
+namespace Common
+{
+class CHFile
+{ 
+public:
+    CHFile(bool _autoClose = true, bool _secAlign = true);
+    virtual ~CHFile();
 
-            struct FileAccessOption
-            {
-                enum FILE_CREATE
-                {
-                    FILE_CREATE_NONE = 0,
-                    FILE_CREATE_NEW = 1,
-                    FILE_CREATE_ALWAYS = 2,
-                    FILE_OPEN_EXISTING = 4,
-                    FILE_OPEN_ALWAYS = 8,
-                    FILE_TRUNCATE_EXISTING = 0x10,
-                    FILE_APPEND = 0x20,
-                };
-            };
+    int  open(const tstring& _fileName, int _access, int _flag, bool _asyn = true, bool _directIO = false);
 
-        public:
-            CHFile(bool _autoClose = true, bool _secAlign = true);
-            virtual ~CHFile();
+    /**
+        * @Function: use aio to read/write data
+        **/
+    int  read (PPER_FILEIO_INFO_t _ioRequest);
+    int  write(PPER_FILEIO_INFO_t _ioRequest);
+    int  write(PPER_FILEIO_INFO_t _ioRequests[], int _count);
 
-            int  open(const tstring& _fileName, int _access, int _flag, bool _asyn = true, bool _directIO = false);
+    /**
+        * @Function: use sync io, _w means wait
+        **/
+    int  read_w  (byte* _data, int _dataLen, u_int64 _offset = -1);
+    int  write_w (const byte* _data, int _dataLen, u_int64 _offset = -1);
+    int  fflush_w();
 
-            /**
-             * @Function: use aio to read/write data
-             **/
-            int  read (PPER_FILEIO_INFO_t _ioRequest);
-            int  write(PPER_FILEIO_INFO_t _ioRequest);
-            int  write(PPER_FILEIO_INFO_t _ioRequests[], int _count);
+    virtual int  close();
+    void attach(handle_t _fileHandle, bool _autoClose = true);
 
-            /**
-             * @Function: use sync io, _w means wait
-             **/
-            int  read_w  (byte* _data, int _dataLen, u_int64 _offset = -1);
-            int  write_w (const byte* _data, int _dataLen, u_int64 _offset = -1);
-            int  fflush_w();
+    u_int32 getSize(u_int32* _high32);
+    u_int64 getSize();
 
-            virtual int  close();
-            void attach(handle_t _fileHandle, bool _autoClose = true);
+    int setSize(u_int64 _fileSize);
+    int rename(const tchar* _newFileName);
+    void seek(u_int64 _offset);
 
-            u_int32 getSize(u_int32* _high32);
-            u_int64 getSize();
+    tstring getFileName()                 { return m_fileName; }
 
-            int setSize(u_int64 _fileSize);
-            int rename(const tchar* _newFileName);
-            void seek(u_int64 _offset);
+    operator handle_t() { return m_fileHandle; }
+    bool is_open() { return m_fileHandle != INVALID_HANDLE_VALUE; }
 
-            tstring getFileName()                 { return m_fileName; }
+private:
+    bool init();
 
-            operator handle_t() { return m_fileHandle; }
-            bool is_open() { return m_fileHandle != INVALID_HANDLE_VALUE; }
+protected:
+    CFilePool*  m_filePool;     // for anyn io
 
-        private:
-            bool init();
+    tstring     m_fileName;
+    handle_t    m_fileHandle;
+    bool        m_autoClose;
 
-        protected:
-            CFilePool*  m_filePool;     // for anyn io
+    u_int32     m_readIndex;
+    u_int32     m_writeIndex;
+    u_int32     m_flag;
+    u_int32     m_option;
 
-            tstring     m_fileName;
-            handle_t    m_fileHandle;
-            bool        m_autoClose;
+    bool        m_directIO;
+    bool        m_secAlign;
 
-            u_int32     m_readIndex;
-            u_int32     m_writeIndex;
-            u_int32     m_flag;
-            u_int32     m_option;
-
-            bool        m_directIO;
-            bool        m_secAlign;
-
-        };
-    }
+};
+}
 }
 
 #endif

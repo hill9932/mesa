@@ -38,11 +38,13 @@ endif(NOT RTE_SDK)
 add_compile_options(
 	-W 
 	-Wall
-	-Wunused
-	-Wunused-variable 
-	-Wunused-parameter 
-	-Wunused-function 
+	-Wno-unused
+	-Wno-unused-variable 
+	-Wno-unused-parameter 
+	-Wno-unused-function 
 	-Wno-deprecated 
+	-Wno-discarded-qualifiers
+	-Wno-missing-field-initializers
 )
 
 add_definitions(

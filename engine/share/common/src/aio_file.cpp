@@ -134,9 +134,9 @@ namespace LabSpace
 
             int z = 0;
             int tries = 0;
-            _ioRequest->hFile = m_fileHandle;
-            _ioRequest->optType = FILE_READ;
-            _ioRequest->index = m_readIndex;
+            _ioRequest->hFile   = m_fileHandle;
+            _ioRequest->optType = FileOperation::FILE_READ;
+            _ioRequest->index   = m_readIndex;
 
 #ifdef WIN32
         retry :
@@ -190,9 +190,9 @@ namespace LabSpace
 
             int z = 0;
             int tries = 0;
-            _ioRequest->hFile = m_fileHandle;
-            _ioRequest->index = m_writeIndex;
-            _ioRequest->optType = FILE_WRITE;
+            _ioRequest->hFile   = m_fileHandle;
+            _ioRequest->index   = m_writeIndex;
+            _ioRequest->optType = FileOperation::FILE_WRITE;
 
 #ifdef WIN32
         retry :

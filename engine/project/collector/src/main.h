@@ -8,6 +8,7 @@
 
 #include "log_.h"
 #include "decode/decode_basic.h"
+#include "decode/decode_ndpi.h"
 
 #ifdef __cplusplus
 extern "C" {

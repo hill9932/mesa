@@ -1,4 +1,6 @@
 #include "decode_basic.h"
+#include "pcap_file.h"
+#include "log_.h"
 
 capture_file    cfile;
 
@@ -15,22 +17,60 @@ c_wireshark_decoder::~c_wireshark_decoder()
 
 int c_wireshark_decoder::decode_file(const char* _filename, print_type_e _print_type)
 {
-    if (0 != init_epan(_filename)) {
-        std::cerr << "Fail to init epan with file " << _filename << std::endl;
+    if (0 != init_epan(_filename)) 
+    {
+        L4C_LOG_ERROR("Fail to init epan with file " << _filename);
+        return -1;
+    }
+    m_filename = _filename;
+        
+    c_pcap_file pcap_file;
+    if (0 != pcap_file.open(_filename,
+        FileAccessMode::ACCESS_READ,
+        FileAccessOption::FILE_OPEN_EXISTING,
+        false,
+        false))
+    {
+        u_int32 err = Util::GetLastSysError(); 
+        L4C_LOG_ERROR("Fail to open file " << _filename << ": " << Util::GetLastSysErrorMessage(err));
         return -1;
     }
 
-    m_filename = _filename;
-        
-    switch (_print_type) {
-        case PRINT_XML:
-            print_each_packet_xml();
-            break;
-        case PRINT_TEXT:
-            print_each_packet_text();
-            break;
-        default:
-            assert(false);
+    byte* pktData = nullptr;
+    packet_header_t newPktHeader;
+    int pktSize = pcap_file.getNextPacket(newPktHeader, pktData);
+
+    epan_dissect_t *edt = m_cfile.edt;
+    wtap* wth           = m_cfile.wth;
+    while (pktSize > 0) 
+    {
+        int                err;
+        gchar             *err_info = nullptr;
+        struct wtap_pkthdr *whdr    = wtap_phdr(m_cfile.wth);
+        guchar             *buf     = wtap_buf_ptr(m_cfile.wth);
+
+        m_cfile.count++;
+
+        whdr->caplen    = newPktHeader.caplen;
+        whdr->len       = newPktHeader.len;
+        whdr->ts.secs   = newPktHeader.ts.tv_sec;
+        whdr->ts.nsecs  = newPktHeader.ts.tv_nsec;
+        whdr->pkt_encap = 1;    // wth->file_encap;  // 1
+  //      whdr->pkt_tsprec    = wth->file_tsprec;
+        whdr->presence_flags = 7;
+
+        frame_data fdlocal;
+        frame_data_init(&fdlocal, m_cfile.count, whdr, m_data_offset, m_cum_bytes);
+        frame_data_set_before_dissect(&fdlocal, &m_cfile.elapsed_time, &m_cfile.ref, m_cfile.prev_dis);
+        m_cfile.ref = &fdlocal;
+
+        epan_dissect_run(edt, m_cfile.cd_t, &(m_cfile.phdr), frame_tvbuff_new(&fdlocal, buf), &fdlocal, &m_cfile.cinfo);
+
+        frame_data_set_after_dissect(&fdlocal, &m_cum_bytes);
+        m_cfile.prev_cap = m_cfile.prev_dis = frame_data_sequence_add(m_cfile.frames, &fdlocal);
+        frame_data_destroy(&fdlocal);
+
+        write_pdml_proto_tree(edt, stdout);
     }
 
     return 0;
@@ -57,6 +97,7 @@ int c_wireshark_decoder::init_epan(const gchar* filename)
     m_cfile.epan = epan_new();
     m_cfile.epan->data = &m_cfile;
     m_cfile.epan->get_frame_ts = get_frame_ts;
+    m_cfile.edt = epan_dissect_new(m_cfile.epan, TRUE, TRUE);
 
     set_timestamp();
     m_cfile.frames = new_frame_data_sequence();
@@ -73,6 +114,30 @@ fail:
     return err;
 }
 
+void c_wireshark_decoder::clean()
+{
+    if (m_cfile.frames != nullptr) 
+    {
+        free_frame_data_sequence(m_cfile.frames);
+        m_cfile.frames = nullptr;
+    }
+
+    if (m_cfile.wth != nullptr) 
+    {
+        wtap_close(m_cfile.wth);
+        m_cfile.wth = nullptr;
+    }
+
+    if (m_cfile.epan != nullptr)
+        epan_free(m_cfile.epan);
+
+    if (m_cfile.edt != nullptr)
+        epan_dissect_free(m_cfile.edt);
+
+    epan_cleanup();
+}
+
+
 gboolean c_wireshark_decoder::read_packet(epan_dissect_t **edt_r)
 {
     epan_dissect_t    *edt;
@@ -82,7 +147,8 @@ gboolean c_wireshark_decoder::read_packet(epan_dissect_t **edt_r)
     struct wtap_pkthdr *whdr = wtap_phdr(m_cfile.wth);
     guchar             *buf  = wtap_buf_ptr(m_cfile.wth);
 
-    if (wtap_read(m_cfile.wth, &err, &err_info, &m_data_offset)) {
+    if (wtap_read(m_cfile.wth, &err, &err_info, &m_data_offset))
+    {
         m_cfile.count++;
 
         frame_data fdlocal;
@@ -112,10 +178,9 @@ void c_wireshark_decoder::print_each_packet_xml()
 {
     epan_dissect_t *edt;
 
-    while (read_packet(&edt)) {
-
+    while (read_packet(&edt)) 
+    {
         write_pdml_proto_tree(edt, stdout);
-
         epan_dissect_free(edt);
         edt = nullptr;
     }
@@ -132,10 +197,9 @@ void c_wireshark_decoder::print_each_packet_text()
     print_args.print_hex = TRUE;
     print_args.print_dissections = print_dissections_expanded;
 
-    while (read_packet(&edt)) {
-
+    while (read_packet(&edt)) 
+    {
         proto_tree_print(&print_args, edt, nullptr, print_stream);
-
         epan_dissect_free(edt);
         edt = nullptr;
     }
@@ -143,7 +207,8 @@ void c_wireshark_decoder::print_each_packet_text()
 
 void c_wireshark_decoder::set_timestamp()
 {
-    switch (wtap_file_tsprec(m_cfile.wth)) {
+    switch (wtap_file_tsprec(m_cfile.wth))
+    {
         case(WTAP_TSPREC_SEC) :
             timestamp_set_precision(TS_PREC_FIXED_SEC);
             break;
@@ -186,9 +251,9 @@ const nstime_t* c_wireshark_decoder::get_frame_ts(void *data, guint32 frame_num)
     if (cf->prev_cap && cf->prev_cap->num == frame_num)
         return &(cf->prev_cap->abs_ts);
 
-    if (cf->frames) {
+    if (cf->frames) 
+    {
         frame_data *fd = frame_data_sequence_find(cf->frames, frame_num);
-
         return (fd) ? &fd->abs_ts : nullptr;
     }
 
@@ -213,20 +278,3 @@ e_prefs* c_wireshark_decoder::get_prefs()
     return prefs_p;
 }
 
-void c_wireshark_decoder::clean()
-{
-    if (m_cfile.frames != nullptr) {
-        free_frame_data_sequence(m_cfile.frames);
-        m_cfile.frames = nullptr;
-    }
-
-    if (m_cfile.wth != nullptr) {
-        wtap_close(m_cfile.wth);
-        m_cfile.wth = nullptr;
-    }
-
-    if (m_cfile.epan != nullptr)
-        epan_free(m_cfile.epan);
-
-    epan_cleanup();
-}

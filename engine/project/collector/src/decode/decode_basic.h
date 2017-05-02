@@ -8,7 +8,6 @@
  
 #define HAVE_STDARG_H 1
 #define WS_MSVC_NORETURN
-#define _GNU_SOURCE
 
 #ifdef __cplusplus
 extern "C" {

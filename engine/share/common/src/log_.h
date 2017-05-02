@@ -25,7 +25,7 @@ namespace LabSpace
     namespace Common
     {
         bool InitLog(const tchar* _configure, const tchar* _category);
-	}
+    }
 }
 
 #define RM_LOG_DEFINE(CategoryName)  log4cplus::Logger* g_logger;// = log4cplus::Logger::getInstance(CategoryName);

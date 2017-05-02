@@ -1,6 +1,6 @@
 #include "main.h"
 #include "file_util.h"
-#include "ndpi_main.h" 
+
 
 RM_LOG_DEFINE(TEXT("collector"));
 
@@ -13,12 +13,13 @@ static int lcore_hello(__attribute__((unused)) void *arg)
 	return 0;
 }
 
+
 int main(int argc, char **argv)
 {
     tstring app_path = FileUtil::GetAppDir();
     tstring filename = app_path + "../configure/project_log4cplus.properties";
 
-    int ret = InitLog(filename.c_str(), "NetKeeper");
+    int ret = InitLog(filename.c_str(), "collector");
     if (!ret)
     {
         PRINT_MSG("Fail to init log.");

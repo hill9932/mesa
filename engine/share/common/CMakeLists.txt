@@ -20,7 +20,8 @@ set(COMMON_SRC 		src/common.cpp
 					src/platform_win32.cpp
 					src/platform_linux.cpp
 					src/sqlite3.c
-					src/sqlite_.cpp)
+					src/sqlite_.cpp
+					src/recv_window.cpp)
 					
 set(COMMON_HEADER 	src/platform.h
 					src/def.h
@@ -38,7 +39,8 @@ set(COMMON_HEADER 	src/platform.h
 					src/system_.h
 					src/sqlite_.h
 					src/locker_.h
-					src/singleton.h)
+					src/singleton.h
+					src/recv_window.h)
 
 add_library(common STATIC ${COMMON_SRC} ${COMMON_HEADER})
 target_link_libraries(common lua log4cplus ${SYSTEM_LIBS})
@@ -55,9 +57,7 @@ set_target_properties (common PROPERTIES FOLDER lib)
 #
 project(common_test)
 
-set(COMMON_TEST_SRC	unitest/string_test.cpp
-					unitest/file_test.cpp
-					unitest/main.cpp)
+AUX_SOURCE_DIRECTORY(unitest COMMON_TEST_SRC)
 
 add_executable(common_test ${COMMON_TEST_SRC})
 add_dependencies(common_test common)

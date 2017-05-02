@@ -24,15 +24,3 @@ typedef enum
     PRINT_TEXT,
 } print_type_e;
 
-struct timestamp_t
-{
-    uint32_t    tv_sec;
-    uint32_t    tv_nsec;
-};
-
-struct packet_header_t
-{
-    struct timestamp_t ts;	    // time stamp
-    uint32_t    caplen;	            // length of portion present
-    uint32_t    len;	            // length this packet (off wire)
-};
